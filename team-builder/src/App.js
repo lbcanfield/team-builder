@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from './components/Form';
 import './App.css';
 import axios from './axios/index';
+import Member from './components/Member';
 
 // Initial Values for the Form
 const initialFormValues = {
@@ -27,6 +28,16 @@ export default function App() {
       role: formValues.role
     }
   }
+
+
+  useEffect(() => {
+    axios.get('dummyapi.com')
+      .then(response => {
+        //console.log(response);
+        setMember(response.data);
+      })
+  }, [])
+
   return (
     <div className="container">
       <h1>Team Management Form</h1>
@@ -37,6 +48,13 @@ export default function App() {
         update={formUpdate}
         submit={submitForm}
       />
+      {
+        member.map(member => {
+          return (
+            <Member key={member.id} information={member} />
+          )
+        })
+      }
     </div>
   );
 }
