@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Form from './components/Form';
-import './App.css';
 import axios from './axios/index';
 import Member from './components/Member';
 
@@ -16,10 +15,12 @@ export default function App() {
 
   // Initial variable state values 
   const [formValues, setFormValues] = useState(initialFormValues);
+  const [formError, setFormError] = useState('');
 
   const formUpdate = (inputData, inputValue) => {
     setFormValues({ ...formValues, [inputData]: inputValue });
   }
+
 
   const submitForm = () => {
     const newMember = {
@@ -27,6 +28,17 @@ export default function App() {
       email: formValues.email.trim(),
       role: formValues.role
     }
+    if (!newMember.memberName || !newMember.email || !newMember.role) {
+      setFormError('Invalid Data Submitted')
+      return;
+    }
+    axios.post('dummyapi.com', newMember)
+      .then(response => {
+        //console.log(response)
+        setMember([response.data, ...member])
+        setFormValues(initialFormValues);
+      })
+      .catch(error => console.error(error))
   }
 
 
@@ -41,7 +53,7 @@ export default function App() {
   return (
     <div className="container">
       <h1>Team Management Form</h1>
-      {/* add form error section here */}
+      {formError && <h2 className='error'>{formError}</h2>}
       <Form
         // sending form values to <Form />
         values={formValues}
