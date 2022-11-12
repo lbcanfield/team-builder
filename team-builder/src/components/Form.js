@@ -1,17 +1,28 @@
 import React from 'react';
 
 export default function Form(props) {
-    const { values } = props; //deconstructing props
+    const { values, update, submit } = props; //deconstructing props
+
+    const onChange = event => {
+        const name = event.target.name;
+        const { value } = event.target;
+        update(name, value);
+    }
+
+    const onSubmit = event => {
+        event.preventDefault();
+        submit();
+    }
     return (
-        <form className='team-form-container'>
-            <div className='form-input-container'>
+        <form className='team-form container' onSubmit={onSubmit}>
+            <div className='form-group inputs'>
                 <label>Team Member Name
                     <input
                         type='text'
                         name='memberName'
                         placeholder='Enter your Name'
                         value={values.memberName}
-                    //onChange={onChange}
+                        onChange={onChange}
                     />
                 </label>
                 <label>Email
@@ -20,15 +31,14 @@ export default function Form(props) {
                         name='email'
                         placeholder='Enter email Address'
                         value={values.email}
-                    //onChange={onChange}
+                        onChange={onChange}
                     />
                 </label>
                 <label>Work Role
                     <select
                         value={values.role}
                         name='role'
-                    //onChange={onChange}
-                    >
+                        onChange={onChange}>
                         <option value=''>--- Select a Role ---</option>
                         <option value='Technical Writer'>Technical Writer</option>
                         <option value='Scrum Master I'>Scrum Master I</option>
@@ -42,6 +52,9 @@ export default function Form(props) {
 
                     </select>
                 </label>
+                <div className='submit'>
+                    <button>Submit Data</button>
+                </div>
             </div>
         </form >
 
